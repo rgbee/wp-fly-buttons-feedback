@@ -1,0 +1,91 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Fly Buttons Feedback\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Social Media Settings"
+msgstr "Настройки социальных сетей"
+
+msgid "Style Settings"
+msgstr "Настройки стилей"
+
+msgid "WhatsApp Phone Number"
+msgstr "Номер телефона WhatsApp"
+
+msgid "WhatsApp Message Text"
+msgstr "Текст сообщения WhatsApp"
+
+msgid "Telegram Link"
+msgstr "Ссылка Telegram"
+
+msgid "Telegram Title"
+msgstr "Заголовок Telegram"
+
+msgid "Viber Phone Number"
+msgstr "Номер телефона Viber"
+
+msgid "Default Icon Color"
+msgstr "Цвет иконок по умолчанию"
+
+msgid "Hover Color"
+msgstr "Цвет при наведении"
+
+msgid "WhatsApp Color"
+msgstr "Цвет WhatsApp"
+
+msgid "Telegram Color"
+msgstr "Цвет Telegram"
+
+msgid "Viber Color"
+msgstr "Цвет Viber"
+
+msgid "Configure your social media contacts and messaging settings."
+msgstr "Настройте контакты в социальных сетях и параметры сообщений."
+
+msgid "Customize the appearance of the fly buttons."
+msgstr "Настройте внешний вид плавающих кнопок."
+
+msgid "Enter WhatsApp phone number with country code (e.g., 79123456789)"
+msgstr "Введите номер WhatsApp с кодом страны (например, 79123456789)"
+
+msgid "Predefined text for WhatsApp message"
+msgstr "Предопределенный текст для сообщения WhatsApp"
+
+msgid "Enter your Telegram profile link"
+msgstr "Введите ссылку на ваш профиль в Telegram"
+
+msgid "Title for Telegram button"
+msgstr "Заголовок для кнопки Telegram"
+
+msgid "Enter Viber phone number with country code"
+msgstr "Введите номер Viber с кодом страны"
+
+msgid "Fly Buttons Settings"
+msgstr "Настройки Fly Buttons"
+
+msgid "Fly Buttons"
+msgstr "Fly Buttons"
+
+msgid "Fly Buttons Feedback Settings"
+msgstr "Настройки плавающих кнопок обратной связи"
+
+msgid "Написать в WhatsApp"
+msgstr "Написать в WhatsApp"
+
+msgid "Написать в Telegram"
+msgstr "Написать в Telegram"
+
+msgid "Написать в Viber"
+msgstr "Написать в Viber"
+
+msgid "Заказать звонок"
+msgstr "Заказать звонок"
+
+msgid "Написать сообщение"
+msgstr "Написать сообщение"
+
+msgid "Оставить отзыв"
+msgstr "Оставить отзыв"
