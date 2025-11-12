@@ -2,7 +2,7 @@
 /**
  * Plugin Name: RGBee Fly Buttons Feedback
  * Description: Плавающие кнопки обратной связи для WhatsApp, Telegram, Viber и форм обратной связи
- * Version: 1.2.1
+ * Version: 1.3.0
  * Author: Александр Курков
  * Author URI: https://rgbee.ru
  * Text Domain: rgbee-fly-buttons-feedback
@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Константы плагина
-define('FLY_BUTTONS_VERSION', '1.2.1');
+define('FLY_BUTTONS_VERSION', '1.3.0');
 define('FLY_BUTTONS_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('FLY_BUTTONS_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -121,6 +121,14 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_social_section'
         );
+
+        add_settings_field(
+            'whatsapp_title',
+            __('WhatsApp Title', 'rgbee-fly-buttons-feedback'),
+            array($this, 'whatsapp_title_callback'),
+            'fly_buttons_admin',
+            'fly_buttons_social_section'
+        );
         
         add_settings_field(
             'telegram_link',
@@ -142,6 +150,14 @@ class FlyButtonsFeedback {
             'viber_phone',
             __('Viber Phone Number', 'rgbee-fly-buttons-feedback'),
             array($this, 'viber_phone_callback'),
+            'fly_buttons_admin',
+            'fly_buttons_social_section'
+        );
+
+        add_settings_field( 
+            'viber_title',
+            __('Viber Title', 'rgbee-fly-buttons-feedback'),
+            array($this, 'viber_title_callback'),
             'fly_buttons_admin',
             'fly_buttons_social_section'
         );
@@ -371,9 +387,11 @@ class FlyButtonsFeedback {
         // Санитизация полей социальных сетей
         $sanitized_input['whatsapp_phone'] = sanitize_text_field($input['whatsapp_phone']);
         $sanitized_input['whatsapp_text'] = sanitize_text_field($input['whatsapp_text']);
+        $sanitized_input['whatsapp_title'] = sanitize_text_field($input['whatsapp_title']);
         $sanitized_input['telegram_link'] = esc_url_raw($input['telegram_link']);
         $sanitized_input['telegram_title'] = sanitize_text_field($input['telegram_title']);
         $sanitized_input['viber_phone'] = sanitize_text_field($input['viber_phone']);
+        $sanitized_input['viber_title'] = sanitize_text_field($input['viber_title']);
         
         // Санитизация настроек кнопок обратной связи
         $sanitized_input['call_enabled'] = isset($input['call_enabled']) ? 1 : 0;
@@ -420,7 +438,7 @@ class FlyButtonsFeedback {
         echo '<p>' . esc_html__('Customize the appearance of the fly buttons.', 'rgbee-fly-buttons-feedback') . '</p>';
     }
     
-    // Callback функции для социальных сетей (остаются без изменений)
+    // Callback функции для социальных сетей
     public function whatsapp_phone_callback() {
         $value = isset($this->options['whatsapp_phone']) ? $this->options['whatsapp_phone'] : '';
         echo '<input type="text" id="whatsapp_phone" name="fly_buttons_settings[whatsapp_phone]" value="' . esc_attr($value) . '" class="regular-text" />';
@@ -432,6 +450,12 @@ class FlyButtonsFeedback {
         echo '<input type="text" id="whatsapp_text" name="fly_buttons_settings[whatsapp_text]" value="' . esc_attr($value) . '" class="regular-text" />';
         echo '<p class="description">' . esc_html__('Predefined text for WhatsApp message', 'rgbee-fly-buttons-feedback') . '</p>';
     }
+
+    public function whatsapp_title_callback() {
+        $value = isset($this->options['whatsapp_title']) ? $this->options['whatsapp_title'] : __('Написать в WhatsApp', 'rgbee-fly-buttons-feedback');
+        echo '<input type="text" id="whatsapp_title" name="fly_buttons_settings[whatsapp_title]" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<p class="description">' . esc_html__('Title for WhatsApp button', 'rgbee-fly-buttons-feedback') . '</p>';
+    }
     
     public function telegram_link_callback() {
         $value = isset($this->options['telegram_link']) ? $this->options['telegram_link'] : '';
@@ -440,7 +464,7 @@ class FlyButtonsFeedback {
     }
     
     public function telegram_title_callback() {
-        $value = isset($this->options['telegram_title']) ? $this->options['telegram_title'] : '';
+        $value = isset($this->options['telegram_title']) ? $this->options['telegram_title'] : __('Написать в Telegram', 'rgbee-fly-buttons-feedback');
         echo '<input type="text" id="telegram_title" name="fly_buttons_settings[telegram_title]" value="' . esc_attr($value) . '" class="regular-text" />';
         echo '<p class="description">' . esc_html__('Title for Telegram button', 'rgbee-fly-buttons-feedback') . '</p>';
     }
@@ -449,6 +473,12 @@ class FlyButtonsFeedback {
         $value = isset($this->options['viber_phone']) ? $this->options['viber_phone'] : '';
         echo '<input type="text" id="viber_phone" name="fly_buttons_settings[viber_phone]" value="' . esc_attr($value) . '" class="regular-text" />';
         echo '<p class="description">' . esc_html__('Enter Viber phone number with country code', 'rgbee-fly-buttons-feedback') . '</p>';
+    }
+
+    public function viber_title_callback() {
+        $value = isset($this->options['viber_title']) ? $this->options['viber_title'] : __('Написать в Viber', 'rgbee-fly-buttons-feedback');
+        echo '<input type="text" id="viber_title" name="fly_buttons_settings[viber_title]" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<p class="description">' . esc_html__('Title for Viber button', 'rgbee-fly-buttons-feedback') . '</p>';
     }
     
     // Callback функции для кнопки "Заказать звонок"
@@ -710,19 +740,21 @@ class FlyButtonsFeedback {
         if (!empty($options['whatsapp_phone'])) {
             $whatsapp_phone_number = preg_replace('/[^0-9]/', '', $options['whatsapp_phone']);
             $whatsapp_text = !empty($options['whatsapp_text']) ? urlencode($options['whatsapp_text']) : '';
-            echo '<div class="fly_item"><a href="https://wa.me/' . esc_attr($whatsapp_phone_number) . '?text=' . esc_attr($whatsapp_text) . '" title="' . esc_attr__('Написать в WhatsApp', 'rgbee-fly-buttons-feedback') . '" target="_blank" class="wa"><i class="fa-brands fa-square-whatsapp"></i></a></div>';
+            $whatsapp_title = !empty($options['whatsapp_title']) ? $options['whatsapp_title'] : __('Написать в WhatsApp', 'rgbee-fly-buttons-feedback');
+            echo '<div class="fly_item"><a href="https://wa.me/' . esc_attr($whatsapp_phone_number) . '?text=' . esc_attr($whatsapp_text) . '" title="' . esc_attr($whatsapp_title) . '" target="_blank" class="wa"><i class="fa-brands fa-square-whatsapp"></i></a></div>';
         }
         
         // Telegram
         if (!empty($options['telegram_link'])) {
-            $tg_title = !empty($options['telegram_title']) ? $options['telegram_title'] : $options['telegram_link'];
-            echo '<div class="fly_item"><a href="' . esc_url($options['telegram_link']) . '" title="' . esc_attr__('Написать в Telegram', 'rgbee-fly-buttons-feedback') . '" target="_blank" class="tg"><i class="fa-brands fa-telegram"></i></a></div>';
+            $telegram_title = !empty($options['telegram_title']) ? $options['telegram_title'] : __('Написать в Telegram', 'rgbee-fly-buttons-feedback');
+            echo '<div class="fly_item"><a href="' . esc_url($options['telegram_link']) . '" title="' . esc_attr($telegram_title) . '" target="_blank" class="tg"><i class="fa-brands fa-telegram"></i></a></div>';
         }
         
         // Viber
         if (!empty($options['viber_phone'])) {
             $viber_phone_number = preg_replace('/[^0-9]/', '', $options['viber_phone']);
-            echo '<div class="fly_item"><a href="viber://chat?number=+' . esc_attr($viber_phone_number) . '" title="' . esc_attr__('Написать в Viber', 'rgbee-fly-buttons-feedback') . '" target="_blank" class="vb"><i class="fa-brands fa-viber"></i></a></div>';
+            $viber_title = !empty($options['viber_title']) ? $options['viber_title'] : __('Написать в Viber', 'rgbee-fly-buttons-feedback');
+            echo '<div class="fly_item"><a href="viber://chat?number=+' . esc_attr($viber_phone_number) . '" title="' . esc_attr($viber_title) . '" target="_blank" class="vb"><i class="fa-brands fa-viber"></i></a></div>';
         }
         
         // Кнопка "Заказать звонок"

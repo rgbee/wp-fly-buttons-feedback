@@ -26,6 +26,9 @@ msgstr "Номер телефона WhatsApp"
 msgid "WhatsApp Message Text"
 msgstr "Текст сообщения WhatsApp"
 
+msgid "WhatsApp Title"
+msgstr "Заголовок WhatsApp"
+
 msgid "Telegram Link"
 msgstr "Ссылка Telegram"
 
@@ -34,6 +37,15 @@ msgstr "Заголовок Telegram"
 
 msgid "Viber Phone Number"
 msgstr "Номер телефона Viber"
+
+msgid "Viber Title"
+msgstr "Заголовок Viber"
+
+msgid "Написать в WhatsApp"
+msgstr "Написать в WhatsApp"
+
+msgid "Написать в Viber"
+msgstr "Написать в Viber"
 
 msgid "Default Icon Color"
 msgstr "Цвет иконок по умолчанию"
@@ -124,6 +136,12 @@ msgstr "Введите ссылку на ваш профиль в Telegram"
 
 msgid "Title for Telegram button"
 msgstr "Заголовок для кнопки Telegram"
+
+msgid "Title for WhatsApp button"
+msgstr "Заголовок для кнопки WhatsApp"
+
+msgid "Title for Viber button"
+msgstr "Заголовок для кнопки Viber"
 
 msgid "Enter Viber phone number with country code"
 msgstr "Введите номер Viber с кодом страны"
