@@ -1,0 +1,192 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: RGBee Fly Buttons Feedback\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.8\n"
+
+msgid "Social Media Settings"
+msgstr "Настройки социальных сетей"
+
+msgid "Feedback Buttons Settings"
+msgstr "Настройки кнопок обратной связи"
+
+msgid "Style Settings"
+msgstr "Настройки стилей"
+
+msgid "WhatsApp Phone Number"
+msgstr "Номер телефона WhatsApp"
+
+msgid "WhatsApp Message Text"
+msgstr "Текст сообщения WhatsApp"
+
+msgid "Telegram Link"
+msgstr "Ссылка Telegram"
+
+msgid "Telegram Title"
+msgstr "Заголовок Telegram"
+
+msgid "Viber Phone Number"
+msgstr "Номер телефона Viber"
+
+msgid "Default Icon Color"
+msgstr "Цвет иконок по умолчанию"
+
+msgid "Hover Color"
+msgstr "Цвет при наведении"
+
+msgid "WhatsApp Color"
+msgstr "Цвет WhatsApp"
+
+msgid "Telegram Color"
+msgstr "Цвет Telegram"
+
+msgid "Viber Color"
+msgstr "Цвет Viber"
+
+msgid "Callback Button Color"
+msgstr "Цвет кнопки звонка"
+
+msgid "Message Button Color"
+msgstr "Цвет кнопки сообщения"
+
+msgid "Review Button Color"
+msgstr "Цвет кнопки отзыва"
+
+msgid "Enable Callback Button"
+msgstr "Включить кнопку звонка"
+
+msgid "Callback Button Title"
+msgstr "Заголовок кнопки звонка"
+
+msgid "Callback Button Link"
+msgstr "Ссылка кнопки звонка"
+
+msgid "Callback Button Attributes"
+msgstr "Атрибуты кнопки звонка"
+
+msgid "Callback Button Custom Class"
+msgstr "CSS класс кнопки звонка"
+
+msgid "Enable Message Button"
+msgstr "Включить кнопку сообщения"
+
+msgid "Message Button Title"
+msgstr "Заголовок кнопки сообщения"
+
+msgid "Message Button Link"
+msgstr "Ссылка кнопки сообщения"
+
+msgid "Message Button Attributes"
+msgstr "Атрибуты кнопки сообщения"
+
+msgid "Message Button Custom Class"
+msgstr "CSS класс кнопки сообщения"
+
+msgid "Enable Review Button"
+msgstr "Включить кнопку отзыва"
+
+msgid "Review Button Title"
+msgstr "Заголовок кнопки отзыва"
+
+msgid "Review Button Link"
+msgstr "Ссылка кнопки отзыва"
+
+msgid "Review Button Attributes"
+msgstr "Атрибуты кнопки отзыва"
+
+msgid "Review Button Custom Class"
+msgstr "CSS класс кнопки отзыва"
+
+msgid "Configure your social media contacts and messaging settings."
+msgstr "Настройте контакты в социальных сетях и параметры сообщений."
+
+msgid "Configure feedback buttons settings - titles, links, attributes and visibility."
+msgstr "Настройте параметры кнопок обратной связи - заголовки, ссылки, атрибуты и видимость."
+
+msgid "Customize the appearance of the fly buttons."
+msgstr "Настройте внешний вид плавающих кнопок."
+
+msgid "Enter WhatsApp phone number with country code (e.g., 79123456789)"
+msgstr "Введите номер WhatsApp с кодом страны (например, 79123456789)"
+
+msgid "Predefined text for WhatsApp message"
+msgstr "Предопределенный текст для сообщения WhatsApp"
+
+msgid "Enter your Telegram profile link"
+msgstr "Введите ссылку на ваш профиль в Telegram"
+
+msgid "Title for Telegram button"
+msgstr "Заголовок для кнопки Telegram"
+
+msgid "Enter Viber phone number with country code"
+msgstr "Введите номер Viber с кодом страны"
+
+msgid "Link for callback button (can be # for modal window)"
+msgstr "Ссылка для кнопки звонка (можно использовать # для модального окна)"
+
+msgid "Custom attributes for callback button (e.g., data-bs-toggle=\"modal\" data-bs-target=\"#callbackModal\")"
+msgstr "Пользовательские атрибуты для кнопки звонка (например, data-bs-toggle=\"modal\" data-bs-target=\"#callbackModal\")"
+
+msgid "Custom CSS class for callback button"
+msgstr "Пользовательский CSS класс для кнопки звонка"
+
+msgid "Link for message button"
+msgstr "Ссылка для кнопки сообщения"
+
+msgid "Custom attributes for message button"
+msgstr "Пользовательские атрибуты для кнопки сообщения"
+
+msgid "Custom CSS class for message button"
+msgstr "Пользовательский CSS класс для кнопки сообщения"
+
+msgid "Link for review button"
+msgstr "Ссылка для кнопки отзыва"
+
+msgid "Custom attributes for review button"
+msgstr "Пользовательские атрибуты для кнопки отзыва"
+
+msgid "Custom CSS class for review button"
+msgstr "Пользовательский CSS класс для кнопки отзыва"
+
+msgid "Enable callback button"
+msgstr "Включить кнопку звонка"
+
+msgid "Enable message button"
+msgstr "Включить кнопку сообщения"
+
+msgid "Enable review button"
+msgstr "Включить кнопку отзыва"
+
+msgid "Fly Buttons Settings"
+msgstr "Настройки Fly Buttons"
+
+msgid "Fly Buttons"
+msgstr "Fly Buttons"
+
+msgid "Fly Buttons Feedback Settings"
+msgstr "Настройки плавающих кнопок обратной связи"
+
+msgid "Написать в WhatsApp"
+msgstr "Написать в WhatsApp"
+
+msgid "Написать в Telegram"
+msgstr "Написать в Telegram"
+
+msgid "Написать в Viber"
+msgstr "Написать в Viber"
+
+msgid "Заказать звонок"
+msgstr "Заказать звонок"
+
+msgid "Написать сообщение"
+msgstr "Написать сообщение"
+
+msgid "Оставить отзыв"
+msgstr "Оставить отзыв"
