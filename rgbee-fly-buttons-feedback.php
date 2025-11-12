@@ -2,7 +2,7 @@
 /**
  * Plugin Name: RGBee Fly Buttons Feedback
  * Description: Плавающие кнопки обратной связи для WhatsApp, Telegram, Viber и форм обратной связи
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Александр Курков
  * Author URI: https://rgbee.ru
  * Text Domain: rgbee-fly-buttons-feedback
@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Константы плагина
-define('FLY_BUTTONS_VERSION', '1.1.0');
+define('FLY_BUTTONS_VERSION', '1.2.0');
 define('FLY_BUTTONS_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('FLY_BUTTONS_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -24,6 +24,7 @@ class FlyButtonsFeedback {
     
     public function __construct() {
         add_action('plugins_loaded', array($this, 'init'));
+        register_activation_hook(__FILE__, array($this, 'activate'));
     }
     
     public function init() {
@@ -39,6 +40,28 @@ class FlyButtonsFeedback {
         
         // Загрузка текстового домена
         load_plugin_textdomain('fly-buttons-feedback', false, dirname(plugin_basename(__FILE__)) . '/languages');
+    }
+
+    public function activate() {
+        // Создаем необходимые папки при активации плагина
+        $this->create_fontawesome_folders();
+    }
+    
+    private function create_fontawesome_folders() {
+        $fontawesome_dir = FLY_BUTTONS_PLUGIN_PATH . 'assets/fontawesome';
+        $css_dir = $fontawesome_dir . '/css';
+        $webfonts_dir = $fontawesome_dir . '/webfonts';
+        
+        // Создаем папки если их нет
+        if (!file_exists($fontawesome_dir)) {
+            wp_mkdir_p($fontawesome_dir);
+        }
+        if (!file_exists($css_dir)) {
+            wp_mkdir_p($css_dir);
+        }
+        if (!file_exists($webfonts_dir)) {
+            wp_mkdir_p($webfonts_dir);
+        }
     }
     
     public function admin_init() {
@@ -560,13 +583,27 @@ class FlyButtonsFeedback {
     }
     
     public function enqueue_scripts() {
-        // Подключаем Font Awesome
-        wp_enqueue_style(
-            'font-awesome',
-            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css',
-            array(),
-            '6.2.1'
-        );
+        // Проверяем существование локальных файлов Font Awesome
+        $local_css_path = FLY_BUTTONS_PLUGIN_PATH . 'assets/fontawesome/css/all.min.css';
+        $local_css_url = FLY_BUTTONS_PLUGIN_URL . 'assets/fontawesome/css/all.min.css';
+        
+        if (file_exists($local_css_path)) {
+            // Используем локальную версию Font Awesome
+            wp_enqueue_style(
+                'font-awesome',
+                $local_css_url,
+                array(),
+                '6.2.1'
+            );
+        } else {
+            // Fallback на CDN если локальные файлы отсутствуют
+            wp_enqueue_style(
+                'font-awesome',
+                'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css',
+                array(),
+                '6.2.1'
+            );
+        }
         
         // Добавляем инлайн стили с пользовательскими цветами
         $this->add_custom_styles();
