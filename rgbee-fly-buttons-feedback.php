@@ -442,7 +442,7 @@ class FlyButtonsFeedback {
     
     public function call_link_callback() {
         $value = isset($this->options['call_link']) ? $this->options['call_link'] : '#';
-        echo '<input type="url" id="call_link" name="fly_buttons_settings[call_link]" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<input type="text" id="call_link" name="fly_buttons_settings[call_link]" value="' . esc_attr($value) . '" class="regular-text" />';
         echo '<p class="description">' . esc_html__('Link for callback button (can be # for modal window)', 'fly-buttons-feedback') . '</p>';
     }
     
@@ -472,7 +472,7 @@ class FlyButtonsFeedback {
     
     public function message_link_callback() {
         $value = isset($this->options['message_link']) ? $this->options['message_link'] : '#';
-        echo '<input type="url" id="message_link" name="fly_buttons_settings[message_link]" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<input type="text" id="message_link" name="fly_buttons_settings[message_link]" value="' . esc_attr($value) . '" class="regular-text" />';
         echo '<p class="description">' . esc_html__('Link for message button', 'fly-buttons-feedback') . '</p>';
     }
     
@@ -502,7 +502,7 @@ class FlyButtonsFeedback {
     
     public function review_link_callback() {
         $value = isset($this->options['review_link']) ? $this->options['review_link'] : '#';
-        echo '<input type="url" id="review_link" name="fly_buttons_settings[review_link]" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<input type="text" id="review_link" name="fly_buttons_settings[review_link]" value="' . esc_attr($value) . '" class="regular-text" />';
         echo '<p class="description">' . esc_html__('Link for review button', 'fly-buttons-feedback') . '</p>';
     }
     
