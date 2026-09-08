@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: RGBee Fly Buttons Feedback
- * Description: Плавающие кнопки обратной связи для WhatsApp, Telegram, Viber и форм обратной связи
- * Version: 1.3.0
+ * Description: Плавающие кнопки обратной связи для WhatsApp, Telegram, Viber, Max и форм обратной связи
+ * Version: 1.4.0
  * Author: Александр Курков
  * Author URI: https://rgbee.ru
  * Text Domain: rgbee-fly-buttons-feedback
@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Константы плагина
-define('FLY_BUTTONS_VERSION', '1.3.0');
+define('FLY_BUTTONS_VERSION', '1.4.0');
 define('FLY_BUTTONS_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('FLY_BUTTONS_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
@@ -95,6 +95,14 @@ class FlyButtonsFeedback {
             'fly_buttons_admin'
         );
         
+        // Секция Яндекс.Метрики
+        add_settings_section(
+            'fly_buttons_metrika_section',
+            __('Яндекс.Метрика', 'rgbee-fly-buttons-feedback'),
+            array($this, 'metrika_section_callback'),
+            'fly_buttons_admin'
+        );
+        
         // Поля для социальных сетей
         $this->add_social_fields();
         
@@ -103,9 +111,19 @@ class FlyButtonsFeedback {
         
         // Поля для стилей
         $this->add_style_fields();
+        
+        // Поле для номера счётчика Метрики
+        add_settings_field(
+            'metrika_counter',
+            __('Номер счётчика', 'rgbee-fly-buttons-feedback'),
+            array($this, 'metrika_counter_callback'),
+            'fly_buttons_admin',
+            'fly_buttons_metrika_section'
+        );
     }
     
     private function add_social_fields() {
+        // WhatsApp
         add_settings_field(
             'whatsapp_phone',
             __('WhatsApp Phone Number', 'rgbee-fly-buttons-feedback'),
@@ -113,7 +131,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_social_section'
         );
-        
         add_settings_field(
             'whatsapp_text',
             __('WhatsApp Message Text', 'rgbee-fly-buttons-feedback'),
@@ -121,7 +138,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_social_section'
         );
-
         add_settings_field(
             'whatsapp_title',
             __('WhatsApp Title', 'rgbee-fly-buttons-feedback'),
@@ -129,7 +145,15 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_social_section'
         );
+        add_settings_field(
+            'whatsapp_goal',
+            __('WhatsApp Goal ID', 'rgbee-fly-buttons-feedback'),
+            array($this, 'whatsapp_goal_callback'),
+            'fly_buttons_admin',
+            'fly_buttons_social_section'
+        );
         
+        // Telegram
         add_settings_field(
             'telegram_link',
             __('Telegram Link', 'rgbee-fly-buttons-feedback'),
@@ -137,7 +161,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_social_section'
         );
-        
         add_settings_field(
             'telegram_title',
             __('Telegram Title', 'rgbee-fly-buttons-feedback'),
@@ -145,7 +168,15 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_social_section'
         );
+        add_settings_field(
+            'telegram_goal',
+            __('Telegram Goal ID', 'rgbee-fly-buttons-feedback'),
+            array($this, 'telegram_goal_callback'),
+            'fly_buttons_admin',
+            'fly_buttons_social_section'
+        );
         
+        // Viber
         add_settings_field(
             'viber_phone',
             __('Viber Phone Number', 'rgbee-fly-buttons-feedback'),
@@ -153,15 +184,22 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_social_section'
         );
-
-        add_settings_field( 
+        add_settings_field(
             'viber_title',
             __('Viber Title', 'rgbee-fly-buttons-feedback'),
             array($this, 'viber_title_callback'),
             'fly_buttons_admin',
             'fly_buttons_social_section'
         );
-
+        add_settings_field(
+            'viber_goal',
+            __('Viber Goal ID', 'rgbee-fly-buttons-feedback'),
+            array($this, 'viber_goal_callback'),
+            'fly_buttons_admin',
+            'fly_buttons_social_section'
+        );
+        
+        // Max
         add_settings_field(
             'max_link',
             __('Max Link', 'rgbee-fly-buttons-feedback'),
@@ -169,11 +207,17 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_social_section'
         );
-
         add_settings_field(
             'max_title',
             __('Max Title', 'rgbee-fly-buttons-feedback'),
             array($this, 'max_title_callback'),
+            'fly_buttons_admin',
+            'fly_buttons_social_section'
+        );
+        add_settings_field(
+            'max_goal',
+            __('Max Goal ID', 'rgbee-fly-buttons-feedback'),
+            array($this, 'max_goal_callback'),
             'fly_buttons_admin',
             'fly_buttons_social_section'
         );
@@ -188,7 +232,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_feedback_section'
         );
-        
         add_settings_field(
             'call_title',
             __('Callback Button Title', 'rgbee-fly-buttons-feedback'),
@@ -196,7 +239,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_feedback_section'
         );
-        
         add_settings_field(
             'call_link',
             __('Callback Button Link', 'rgbee-fly-buttons-feedback'),
@@ -204,7 +246,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_feedback_section'
         );
-        
         add_settings_field(
             'call_attributes',
             __('Callback Button Attributes', 'rgbee-fly-buttons-feedback'),
@@ -212,11 +253,17 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_feedback_section'
         );
-        
         add_settings_field(
             'call_custom_class',
             __('Callback Button Custom Class', 'rgbee-fly-buttons-feedback'),
             array($this, 'call_custom_class_callback'),
+            'fly_buttons_admin',
+            'fly_buttons_feedback_section'
+        );
+        add_settings_field(
+            'call_goal',
+            __('Callback Goal ID', 'rgbee-fly-buttons-feedback'),
+            array($this, 'call_goal_callback'),
             'fly_buttons_admin',
             'fly_buttons_feedback_section'
         );
@@ -229,7 +276,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_feedback_section'
         );
-        
         add_settings_field(
             'message_title',
             __('Message Button Title', 'rgbee-fly-buttons-feedback'),
@@ -237,7 +283,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_feedback_section'
         );
-        
         add_settings_field(
             'message_link',
             __('Message Button Link', 'rgbee-fly-buttons-feedback'),
@@ -245,7 +290,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_feedback_section'
         );
-        
         add_settings_field(
             'message_attributes',
             __('Message Button Attributes', 'rgbee-fly-buttons-feedback'),
@@ -253,11 +297,17 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_feedback_section'
         );
-        
         add_settings_field(
             'message_custom_class',
             __('Message Button Custom Class', 'rgbee-fly-buttons-feedback'),
             array($this, 'message_custom_class_callback'),
+            'fly_buttons_admin',
+            'fly_buttons_feedback_section'
+        );
+        add_settings_field(
+            'message_goal',
+            __('Message Goal ID', 'rgbee-fly-buttons-feedback'),
+            array($this, 'message_goal_callback'),
             'fly_buttons_admin',
             'fly_buttons_feedback_section'
         );
@@ -270,7 +320,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_feedback_section'
         );
-        
         add_settings_field(
             'review_title',
             __('Review Button Title', 'rgbee-fly-buttons-feedback'),
@@ -278,7 +327,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_feedback_section'
         );
-        
         add_settings_field(
             'review_link',
             __('Review Button Link', 'rgbee-fly-buttons-feedback'),
@@ -286,7 +334,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_feedback_section'
         );
-        
         add_settings_field(
             'review_attributes',
             __('Review Button Attributes', 'rgbee-fly-buttons-feedback'),
@@ -294,11 +341,17 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_feedback_section'
         );
-        
         add_settings_field(
             'review_custom_class',
             __('Review Button Custom Class', 'rgbee-fly-buttons-feedback'),
             array($this, 'review_custom_class_callback'),
+            'fly_buttons_admin',
+            'fly_buttons_feedback_section'
+        );
+        add_settings_field(
+            'review_goal',
+            __('Review Goal ID', 'rgbee-fly-buttons-feedback'),
+            array($this, 'review_goal_callback'),
             'fly_buttons_admin',
             'fly_buttons_feedback_section'
         );
@@ -312,7 +365,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_style_section'
         );
-        
         add_settings_field(
             'hover_color',
             __('Hover Color', 'rgbee-fly-buttons-feedback'),
@@ -320,7 +372,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_style_section'
         );
-        
         add_settings_field(
             'whatsapp_color',
             __('WhatsApp Color', 'rgbee-fly-buttons-feedback'),
@@ -328,7 +379,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_style_section'
         );
-        
         add_settings_field(
             'telegram_color',
             __('Telegram Color', 'rgbee-fly-buttons-feedback'),
@@ -336,7 +386,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_style_section'
         );
-        
         add_settings_field(
             'viber_color',
             __('Viber Color', 'rgbee-fly-buttons-feedback'),
@@ -344,8 +393,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_style_section'
         );
-        
-        // Цвета для кнопок обратной связи
         add_settings_field(
             'call_color',
             __('Callback Button Color', 'rgbee-fly-buttons-feedback'),
@@ -353,7 +400,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_style_section'
         );
-        
         add_settings_field(
             'message_color',
             __('Message Button Color', 'rgbee-fly-buttons-feedback'),
@@ -361,7 +407,6 @@ class FlyButtonsFeedback {
             'fly_buttons_admin',
             'fly_buttons_style_section'
         );
-        
         add_settings_field(
             'review_color',
             __('Review Button Color', 'rgbee-fly-buttons-feedback'),
@@ -400,37 +445,50 @@ class FlyButtonsFeedback {
     public function sanitize_settings($input) {
         $sanitized_input = array();
         
-        // Санитизация полей социальных сетей
+        // Социальные сети
         $sanitized_input['whatsapp_phone'] = sanitize_text_field($input['whatsapp_phone']);
         $sanitized_input['whatsapp_text'] = sanitize_text_field($input['whatsapp_text']);
         $sanitized_input['whatsapp_title'] = sanitize_text_field($input['whatsapp_title']);
+        $sanitized_input['whatsapp_goal'] = sanitize_text_field($input['whatsapp_goal']);
+        
         $sanitized_input['telegram_link'] = esc_url_raw($input['telegram_link']);
         $sanitized_input['telegram_title'] = sanitize_text_field($input['telegram_title']);
+        $sanitized_input['telegram_goal'] = sanitize_text_field($input['telegram_goal']);
+        
         $sanitized_input['viber_phone'] = sanitize_text_field($input['viber_phone']);
         $sanitized_input['viber_title'] = sanitize_text_field($input['viber_title']);
+        $sanitized_input['viber_goal'] = sanitize_text_field($input['viber_goal']);
+        
         $sanitized_input['max_link'] = esc_url_raw($input['max_link']);
         $sanitized_input['max_title'] = sanitize_text_field($input['max_title']);
+        $sanitized_input['max_goal'] = sanitize_text_field($input['max_goal']);
         
-        // Санитизация настроек кнопок обратной связи
+        // Кнопки обратной связи
         $sanitized_input['call_enabled'] = isset($input['call_enabled']) ? 1 : 0;
         $sanitized_input['call_title'] = sanitize_text_field($input['call_title']);
         $sanitized_input['call_link'] = esc_url_raw($input['call_link']);
         $sanitized_input['call_attributes'] = sanitize_text_field($input['call_attributes']);
         $sanitized_input['call_custom_class'] = sanitize_text_field($input['call_custom_class']);
+        $sanitized_input['call_goal'] = sanitize_text_field($input['call_goal']);
         
         $sanitized_input['message_enabled'] = isset($input['message_enabled']) ? 1 : 0;
         $sanitized_input['message_title'] = sanitize_text_field($input['message_title']);
         $sanitized_input['message_link'] = esc_url_raw($input['message_link']);
         $sanitized_input['message_attributes'] = sanitize_text_field($input['message_attributes']);
         $sanitized_input['message_custom_class'] = sanitize_text_field($input['message_custom_class']);
+        $sanitized_input['message_goal'] = sanitize_text_field($input['message_goal']);
         
         $sanitized_input['review_enabled'] = isset($input['review_enabled']) ? 1 : 0;
         $sanitized_input['review_title'] = sanitize_text_field($input['review_title']);
         $sanitized_input['review_link'] = esc_url_raw($input['review_link']);
         $sanitized_input['review_attributes'] = sanitize_text_field($input['review_attributes']);
         $sanitized_input['review_custom_class'] = sanitize_text_field($input['review_custom_class']);
+        $sanitized_input['review_goal'] = sanitize_text_field($input['review_goal']);
         
-        // Санитизация цветов
+        // Метрика
+        $sanitized_input['metrika_counter'] = sanitize_text_field($input['metrika_counter']);
+        
+        // Цвета
         $sanitized_input['default_color'] = sanitize_hex_color($input['default_color']);
         $sanitized_input['hover_color'] = sanitize_hex_color($input['hover_color']);
         $sanitized_input['whatsapp_color'] = sanitize_hex_color($input['whatsapp_color']);
@@ -443,7 +501,7 @@ class FlyButtonsFeedback {
         return $sanitized_input;
     }
     
-    // Callback функции для секций
+    // ------ Callback для секций ------
     public function social_section_callback() {
         echo '<p>' . esc_html__('Configure your social media contacts and messaging settings.', 'rgbee-fly-buttons-feedback') . '</p>';
     }
@@ -456,7 +514,11 @@ class FlyButtonsFeedback {
         echo '<p>' . esc_html__('Customize the appearance of the fly buttons.', 'rgbee-fly-buttons-feedback') . '</p>';
     }
     
-    // Callback функции для социальных сетей
+    public function metrika_section_callback() {
+        echo '<p>' . esc_html__('Настройки интеграции с Яндекс.Метрикой. Если номер счётчика не указан, события не отправляются.', 'rgbee-fly-buttons-feedback') . '</p>';
+    }
+    
+    // ------ Callback для социальных сетей (поля) ------
     public function whatsapp_phone_callback() {
         $value = isset($this->options['whatsapp_phone']) ? $this->options['whatsapp_phone'] : '';
         echo '<input type="text" id="whatsapp_phone" name="fly_buttons_settings[whatsapp_phone]" value="' . esc_attr($value) . '" class="regular-text" />';
@@ -468,11 +530,17 @@ class FlyButtonsFeedback {
         echo '<input type="text" id="whatsapp_text" name="fly_buttons_settings[whatsapp_text]" value="' . esc_attr($value) . '" class="regular-text" />';
         echo '<p class="description">' . esc_html__('Predefined text for WhatsApp message', 'rgbee-fly-buttons-feedback') . '</p>';
     }
-
+    
     public function whatsapp_title_callback() {
         $value = isset($this->options['whatsapp_title']) ? $this->options['whatsapp_title'] : __('Написать в WhatsApp', 'rgbee-fly-buttons-feedback');
         echo '<input type="text" id="whatsapp_title" name="fly_buttons_settings[whatsapp_title]" value="' . esc_attr($value) . '" class="regular-text" />';
         echo '<p class="description">' . esc_html__('Title for WhatsApp button', 'rgbee-fly-buttons-feedback') . '</p>';
+    }
+    
+    public function whatsapp_goal_callback() {
+        $value = isset($this->options['whatsapp_goal']) ? $this->options['whatsapp_goal'] : '';
+        echo '<input type="text" id="whatsapp_goal" name="fly_buttons_settings[whatsapp_goal]" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<p class="description">' . esc_html__('Идентификатор цели для клика по WhatsApp', 'rgbee-fly-buttons-feedback') . '</p>';
     }
     
     public function telegram_link_callback() {
@@ -487,31 +555,49 @@ class FlyButtonsFeedback {
         echo '<p class="description">' . esc_html__('Title for Telegram button', 'rgbee-fly-buttons-feedback') . '</p>';
     }
     
+    public function telegram_goal_callback() {
+        $value = isset($this->options['telegram_goal']) ? $this->options['telegram_goal'] : '';
+        echo '<input type="text" id="telegram_goal" name="fly_buttons_settings[telegram_goal]" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<p class="description">' . esc_html__('Идентификатор цели для клика по Telegram', 'rgbee-fly-buttons-feedback') . '</p>';
+    }
+    
     public function viber_phone_callback() {
         $value = isset($this->options['viber_phone']) ? $this->options['viber_phone'] : '';
         echo '<input type="text" id="viber_phone" name="fly_buttons_settings[viber_phone]" value="' . esc_attr($value) . '" class="regular-text" />';
         echo '<p class="description">' . esc_html__('Enter Viber phone number with country code', 'rgbee-fly-buttons-feedback') . '</p>';
     }
-
+    
     public function viber_title_callback() {
         $value = isset($this->options['viber_title']) ? $this->options['viber_title'] : __('Написать в Viber', 'rgbee-fly-buttons-feedback');
         echo '<input type="text" id="viber_title" name="fly_buttons_settings[viber_title]" value="' . esc_attr($value) . '" class="regular-text" />';
         echo '<p class="description">' . esc_html__('Title for Viber button', 'rgbee-fly-buttons-feedback') . '</p>';
     }
-
+    
+    public function viber_goal_callback() {
+        $value = isset($this->options['viber_goal']) ? $this->options['viber_goal'] : '';
+        echo '<input type="text" id="viber_goal" name="fly_buttons_settings[viber_goal]" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<p class="description">' . esc_html__('Идентификатор цели для клика по Viber', 'rgbee-fly-buttons-feedback') . '</p>';
+    }
+    
     public function max_link_callback() {
         $value = isset($this->options['max_link']) ? $this->options['max_link'] : '';
         echo '<input type="url" id="max_link" name="fly_buttons_settings[max_link]" value="' . esc_attr($value) . '" class="regular-text" />';
         echo '<p class="description">' . esc_html__('Enter your Max profile link', 'rgbee-fly-buttons-feedback') . '</p>';
     }
-
+    
     public function max_title_callback() {
         $value = isset($this->options['max_title']) ? $this->options['max_title'] : __('Написать в Max', 'rgbee-fly-buttons-feedback');
         echo '<input type="text" id="max_title" name="fly_buttons_settings[max_title]" value="' . esc_attr($value) . '" class="regular-text" />';
         echo '<p class="description">' . esc_html__('Title for Max button', 'rgbee-fly-buttons-feedback') . '</p>';
     }
     
-    // Callback функции для кнопки "Заказать звонок"
+    public function max_goal_callback() {
+        $value = isset($this->options['max_goal']) ? $this->options['max_goal'] : '';
+        echo '<input type="text" id="max_goal" name="fly_buttons_settings[max_goal]" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<p class="description">' . esc_html__('Идентификатор цели для клика по Max', 'rgbee-fly-buttons-feedback') . '</p>';
+    }
+    
+    // ------ Callback для кнопок обратной связи ------
     public function call_enabled_callback() {
         $value = isset($this->options['call_enabled']) ? $this->options['call_enabled'] : 1;
         echo '<input type="checkbox" id="call_enabled" name="fly_buttons_settings[call_enabled]" value="1" ' . checked(1, $value, false) . ' />';
@@ -541,7 +627,12 @@ class FlyButtonsFeedback {
         echo '<p class="description">' . esc_html__('Custom CSS class for callback button', 'rgbee-fly-buttons-feedback') . '</p>';
     }
     
-    // Callback функции для кнопки "Написать сообщение"
+    public function call_goal_callback() {
+        $value = isset($this->options['call_goal']) ? $this->options['call_goal'] : '';
+        echo '<input type="text" id="call_goal" name="fly_buttons_settings[call_goal]" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<p class="description">' . esc_html__('Идентификатор цели для кнопки "Заказать звонок"', 'rgbee-fly-buttons-feedback') . '</p>';
+    }
+    
     public function message_enabled_callback() {
         $value = isset($this->options['message_enabled']) ? $this->options['message_enabled'] : 1;
         echo '<input type="checkbox" id="message_enabled" name="fly_buttons_settings[message_enabled]" value="1" ' . checked(1, $value, false) . ' />';
@@ -571,7 +662,12 @@ class FlyButtonsFeedback {
         echo '<p class="description">' . esc_html__('Custom CSS class for message button', 'rgbee-fly-buttons-feedback') . '</p>';
     }
     
-    // Callback функции для кнопки "Оставить отзыв"
+    public function message_goal_callback() {
+        $value = isset($this->options['message_goal']) ? $this->options['message_goal'] : '';
+        echo '<input type="text" id="message_goal" name="fly_buttons_settings[message_goal]" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<p class="description">' . esc_html__('Идентификатор цели для кнопки "Написать сообщение"', 'rgbee-fly-buttons-feedback') . '</p>';
+    }
+    
     public function review_enabled_callback() {
         $value = isset($this->options['review_enabled']) ? $this->options['review_enabled'] : 1;
         echo '<input type="checkbox" id="review_enabled" name="fly_buttons_settings[review_enabled]" value="1" ' . checked(1, $value, false) . ' />';
@@ -601,7 +697,20 @@ class FlyButtonsFeedback {
         echo '<p class="description">' . esc_html__('Custom CSS class for review button', 'rgbee-fly-buttons-feedback') . '</p>';
     }
     
-    // Callback функции для цветов (добавляем новые)
+    public function review_goal_callback() {
+        $value = isset($this->options['review_goal']) ? $this->options['review_goal'] : '';
+        echo '<input type="text" id="review_goal" name="fly_buttons_settings[review_goal]" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<p class="description">' . esc_html__('Идентификатор цели для кнопки "Оставить отзыв"', 'rgbee-fly-buttons-feedback') . '</p>';
+    }
+    
+    // ------ Callback для Метрики ------
+    public function metrika_counter_callback() {
+        $value = isset($this->options['metrika_counter']) ? $this->options['metrika_counter'] : '';
+        echo '<input type="text" id="metrika_counter" name="fly_buttons_settings[metrika_counter]" value="' . esc_attr($value) . '" class="regular-text" />';
+        echo '<p class="description">' . esc_html__('Введите номер вашего счётчика Яндекс.Метрики (например, 94056343)', 'rgbee-fly-buttons-feedback') . '</p>';
+    }
+    
+    // ------ Callback для цветов ------
     public function default_color_callback() {
         $value = isset($this->options['default_color']) ? $this->options['default_color'] : '#ddd';
         echo '<input type="color" id="default_color" name="fly_buttons_settings[default_color]" value="' . esc_attr($value) . '" />';
@@ -642,13 +751,13 @@ class FlyButtonsFeedback {
         echo '<input type="color" id="review_color" name="fly_buttons_settings[review_color]" value="' . esc_attr($value) . '" />';
     }
     
+    // ------ Стили и скрипты ------
     public function enqueue_scripts() {
         // Проверяем существование локальных файлов Font Awesome
         $local_css_path = FLY_BUTTONS_PLUGIN_PATH . 'assets/fontawesome/css/all.min.css';
         $local_css_url = FLY_BUTTONS_PLUGIN_URL . 'assets/fontawesome/css/all.min.css';
         
         if (file_exists($local_css_path)) {
-            // Используем локальную версию Font Awesome
             wp_enqueue_style(
                 'font-awesome',
                 $local_css_url,
@@ -656,7 +765,6 @@ class FlyButtonsFeedback {
                 '6.2.1'
             );
         } else {
-            // Fallback на CDN если локальные файлы отсутствуют
             wp_enqueue_style(
                 'font-awesome',
                 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css',
@@ -665,14 +773,12 @@ class FlyButtonsFeedback {
             );
         }
         
-        // Добавляем инлайн стили с пользовательскими цветами
         $this->add_custom_styles();
     }
     
     private function add_custom_styles() {
         $options = get_option('fly_buttons_settings');
         
-        // Получаем цвета
         $default_color = isset($options['default_color']) ? $options['default_color'] : '#aaaaaa';
         $hover_color = isset($options['hover_color']) ? $options['hover_color'] : '#1a1a1a';
         $whatsapp_color = isset($options['whatsapp_color']) ? $options['whatsapp_color'] : '#2ab13f';
@@ -706,7 +812,6 @@ class FlyButtonsFeedback {
         }
         .fly_buttons .fly_item:last-child {border-bottom: none;}
         
-        /* Общее правило для всех ссылок - убираем подчеркивание */
         .fly_buttons .fly_item a {
             width: 60px; 
             height: 60px; 
@@ -737,12 +842,9 @@ class FlyButtonsFeedback {
             filter: grayscale(100%) brightness(0.8);
         }
         
-        /* Цвета для социальных кнопок */
         .fly_buttons .fly_item a.wa {color: {$whatsapp_color};}
         .fly_buttons .fly_item a.tg {color: {$telegram_color};}
         .fly_buttons .fly_item a.vb {color: {$viber_color};}
-        
-        /* Цвета для кнопок обратной связи */
         .fly_buttons .fly_item a.call-btn {color: {$call_color};}
         .fly_buttons .fly_item a.message-btn {color: {$message_color};}
         .fly_buttons .fly_item a.review-btn {color: {$review_color};}
@@ -775,66 +877,87 @@ class FlyButtonsFeedback {
         wp_add_inline_style('font-awesome', $custom_css);
     }
     
+    // ------ Вспомогательный метод для формирования onclick ------
+    private function build_onclick($goal_id) {
+        if (empty($this->options['metrika_counter']) || empty($goal_id)) {
+            return '';
+        }
+        $counter = intval($this->options['metrika_counter']);
+        return ' onclick="ym(' . $counter . ', \'reachGoal\', \'' . esc_js($goal_id) . '\'); return true;"';
+    }
+    
+    // ------ Вывод кнопок на фронтенд ------
     public function display_fly_buttons() {
-        $options = get_option('fly_buttons_settings');
+        $this->options = get_option('fly_buttons_settings');
         
         echo '<div class="fly_buttons">';
         
         // WhatsApp
-        if (!empty($options['whatsapp_phone'])) {
-            $whatsapp_phone_number = preg_replace('/[^0-9]/', '', $options['whatsapp_phone']);
-            $whatsapp_text = !empty($options['whatsapp_text']) ? urlencode($options['whatsapp_text']) : '';
-            $whatsapp_title = !empty($options['whatsapp_title']) ? $options['whatsapp_title'] : __('Написать в WhatsApp', 'rgbee-fly-buttons-feedback');
-            echo '<div class="fly_item"><a href="https://wa.me/' . esc_attr($whatsapp_phone_number) . '?text=' . esc_attr($whatsapp_text) . '" title="' . esc_attr($whatsapp_title) . '" target="_blank" class="wa" onclick="ym(94056343, \'reachGoal\', \'fly_click_wa\'); return true;"><i class="fa-brands fa-square-whatsapp"></i></a></div>';
+        if (!empty($this->options['whatsapp_phone'])) {
+            $phone = preg_replace('/[^0-9]/', '', $this->options['whatsapp_phone']);
+            $text = !empty($this->options['whatsapp_text']) ? urlencode($this->options['whatsapp_text']) : '';
+            $title = !empty($this->options['whatsapp_title']) ? $this->options['whatsapp_title'] : __('Написать в WhatsApp', 'rgbee-fly-buttons-feedback');
+            $goal = isset($this->options['whatsapp_goal']) ? $this->options['whatsapp_goal'] : '';
+            $onclick = $this->build_onclick($goal);
+            echo '<div class="fly_item"><a href="https://wa.me/' . esc_attr($phone) . '?text=' . esc_attr($text) . '" title="' . esc_attr($title) . '" target="_blank" class="wa"' . $onclick . '><i class="fa-brands fa-square-whatsapp"></i></a></div>';
         }
         
         // Telegram
-        if (!empty($options['telegram_link'])) {
-            $telegram_title = !empty($options['telegram_title']) ? $options['telegram_title'] : __('Написать в Telegram', 'rgbee-fly-buttons-feedback');
-            echo '<div class="fly_item"><a href="' . esc_url($options['telegram_link']) . '" title="' . esc_attr($telegram_title) . '" target="_blank" class="tg" onclick="ym(94056343, \'reachGoal\', \'fly_click_tg\'); return true;"><i class="fa-brands fa-telegram"></i></a></div>';
+        if (!empty($this->options['telegram_link'])) {
+            $title = !empty($this->options['telegram_title']) ? $this->options['telegram_title'] : __('Написать в Telegram', 'rgbee-fly-buttons-feedback');
+            $goal = isset($this->options['telegram_goal']) ? $this->options['telegram_goal'] : '';
+            $onclick = $this->build_onclick($goal);
+            echo '<div class="fly_item"><a href="' . esc_url($this->options['telegram_link']) . '" title="' . esc_attr($title) . '" target="_blank" class="tg"' . $onclick . '><i class="fa-brands fa-telegram"></i></a></div>';
         }
-
+        
         // Max
-        if (!empty($options['max_link'])) {
-            $max_title = !empty($options['max_title']) ? $options['max_title'] : __('Написать в Max', 'rgbee-fly-buttons-feedback');
-            echo '<div class="fly_item"><a href="' . esc_url($options['max_link']) . '" title="' . esc_attr($max_title) . '" target="_blank" class="max" onclick="ym(94056343, \'reachGoal\', \'fly_click_max\'); return true;"><img src="' . FLY_BUTTONS_PLUGIN_URL . 'assets/icons/icon-max.png" alt="Max" style="width: 25px; height: 25px;"></a></div>';
+        if (!empty($this->options['max_link'])) {
+            $title = !empty($this->options['max_title']) ? $this->options['max_title'] : __('Написать в Max', 'rgbee-fly-buttons-feedback');
+            $goal = isset($this->options['max_goal']) ? $this->options['max_goal'] : '';
+            $onclick = $this->build_onclick($goal);
+            echo '<div class="fly_item"><a href="' . esc_url($this->options['max_link']) . '" title="' . esc_attr($title) . '" target="_blank" class="max"' . $onclick . '><img src="' . FLY_BUTTONS_PLUGIN_URL . 'assets/icons/icon-max.png" alt="Max" style="width: 25px; height: 25px;"></a></div>';
         }
         
         // Viber
-        if (!empty($options['viber_phone'])) {
-            $viber_phone_number = preg_replace('/[^0-9]/', '', $options['viber_phone']);
-            $viber_title = !empty($options['viber_title']) ? $options['viber_title'] : __('Написать в Viber', 'rgbee-fly-buttons-feedback');
-            echo '<div class="fly_item"><a href="viber://chat?number=+' . esc_attr($viber_phone_number) . '" title="' . esc_attr($viber_title) . '" target="_blank" class="vb" onclick="ym(94056343, \'reachGoal\', \'fly_click_viber\'); return true;"><i class="fa-brands fa-viber"></i></a></div>';
+        if (!empty($this->options['viber_phone'])) {
+            $phone = preg_replace('/[^0-9]/', '', $this->options['viber_phone']);
+            $title = !empty($this->options['viber_title']) ? $this->options['viber_title'] : __('Написать в Viber', 'rgbee-fly-buttons-feedback');
+            $goal = isset($this->options['viber_goal']) ? $this->options['viber_goal'] : '';
+            $onclick = $this->build_onclick($goal);
+            echo '<div class="fly_item"><a href="viber://chat?number=+' . esc_attr($phone) . '" title="' . esc_attr($title) . '" target="_blank" class="vb"' . $onclick . '><i class="fa-brands fa-viber"></i></a></div>';
         }
         
-        // Кнопка "Заказать звонок"
-        if (isset($options['call_enabled']) && $options['call_enabled']) {
-            $call_title = !empty($options['call_title']) ? $options['call_title'] : __('Заказать звонок', 'rgbee-fly-buttons-feedback');
-            $call_link = !empty($options['call_link']) ? $options['call_link'] : '#';
-            $call_attributes = !empty($options['call_attributes']) ? $options['call_attributes'] : '';
-            $call_custom_class = !empty($options['call_custom_class']) ? ' ' . $options['call_custom_class'] : '';
-            
-            echo '<div class="fly_item"><a href="' . esc_url($call_link) . '" title="' . esc_attr($call_title) . '" class="call-btn' . esc_attr($call_custom_class) . '" ' . $call_attributes . '><i class="fa-solid fa-phone"></i></a></div>';
+        // Callback
+        if (isset($this->options['call_enabled']) && $this->options['call_enabled']) {
+            $title = !empty($this->options['call_title']) ? $this->options['call_title'] : __('Заказать звонок', 'rgbee-fly-buttons-feedback');
+            $link = !empty($this->options['call_link']) ? $this->options['call_link'] : '#';
+            $attributes = !empty($this->options['call_attributes']) ? $this->options['call_attributes'] : '';
+            $custom_class = !empty($this->options['call_custom_class']) ? ' ' . $this->options['call_custom_class'] : '';
+            $goal = isset($this->options['call_goal']) ? $this->options['call_goal'] : '';
+            $onclick = $this->build_onclick($goal);
+            echo '<div class="fly_item"><a href="' . esc_url($link) . '" title="' . esc_attr($title) . '" class="call-btn' . esc_attr($custom_class) . '" ' . $attributes . $onclick . '><i class="fa-solid fa-phone"></i></a></div>';
         }
         
-        // Кнопка "Написать сообщение"
-        if (isset($options['message_enabled']) && $options['message_enabled']) {
-            $message_title = !empty($options['message_title']) ? $options['message_title'] : __('Написать сообщение', 'rgbee-fly-buttons-feedback');
-            $message_link = !empty($options['message_link']) ? $options['message_link'] : '#';
-            $message_attributes = !empty($options['message_attributes']) ? $options['message_attributes'] : '';
-            $message_custom_class = !empty($options['message_custom_class']) ? ' ' . $options['message_custom_class'] : '';
-            
-            echo '<div class="fly_item"><a href="' . esc_url($message_link) . '" title="' . esc_attr($message_title) . '" class="message-btn' . esc_attr($message_custom_class) . '" ' . $message_attributes . '><i class="fa-solid fa-envelope"></i></a></div>';
+        // Message
+        if (isset($this->options['message_enabled']) && $this->options['message_enabled']) {
+            $title = !empty($this->options['message_title']) ? $this->options['message_title'] : __('Написать сообщение', 'rgbee-fly-buttons-feedback');
+            $link = !empty($this->options['message_link']) ? $this->options['message_link'] : '#';
+            $attributes = !empty($this->options['message_attributes']) ? $this->options['message_attributes'] : '';
+            $custom_class = !empty($this->options['message_custom_class']) ? ' ' . $this->options['message_custom_class'] : '';
+            $goal = isset($this->options['message_goal']) ? $this->options['message_goal'] : '';
+            $onclick = $this->build_onclick($goal);
+            echo '<div class="fly_item"><a href="' . esc_url($link) . '" title="' . esc_attr($title) . '" class="message-btn' . esc_attr($custom_class) . '" ' . $attributes . $onclick . '><i class="fa-solid fa-envelope"></i></a></div>';
         }
         
-        // Кнопка "Оставить отзыв"
-        if (isset($options['review_enabled']) && $options['review_enabled']) {
-            $review_title = !empty($options['review_title']) ? $options['review_title'] : __('Оставить отзыв', 'rgbee-fly-buttons-feedback');
-            $review_link = !empty($options['review_link']) ? $options['review_link'] : '#';
-            $review_attributes = !empty($options['review_attributes']) ? $options['review_attributes'] : '';
-            $review_custom_class = !empty($options['review_custom_class']) ? ' ' . $options['review_custom_class'] : '';
-            
-            echo '<div class="fly_item"><a href="' . esc_url($review_link) . '" title="' . esc_attr($review_title) . '" class="review-btn' . esc_attr($review_custom_class) . '" ' . $review_attributes . '><i class="fa-solid fa-comment-dots"></i></a></div>';
+        // Review
+        if (isset($this->options['review_enabled']) && $this->options['review_enabled']) {
+            $title = !empty($this->options['review_title']) ? $this->options['review_title'] : __('Оставить отзыв', 'rgbee-fly-buttons-feedback');
+            $link = !empty($this->options['review_link']) ? $this->options['review_link'] : '#';
+            $attributes = !empty($this->options['review_attributes']) ? $this->options['review_attributes'] : '';
+            $custom_class = !empty($this->options['review_custom_class']) ? ' ' . $this->options['review_custom_class'] : '';
+            $goal = isset($this->options['review_goal']) ? $this->options['review_goal'] : '';
+            $onclick = $this->build_onclick($goal);
+            echo '<div class="fly_item"><a href="' . esc_url($link) . '" title="' . esc_attr($title) . '" class="review-btn' . esc_attr($custom_class) . '" ' . $attributes . $onclick . '><i class="fa-solid fa-comment-dots"></i></a></div>';
         }
         
         echo '</div>';
