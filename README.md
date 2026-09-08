@@ -1,7 +1,7 @@
 # RGBee Fly Buttons Feedback
 
 ![WordPress](https://img.shields.io/badge/WordPress-6.0%2B-blue)
-![Version](https://img.shields.io/badge/Version-1.3.0-green)
+![Version](https://img.shields.io/badge/Version-1.4.0-green)
 
 Плагин WordPress для добавления плавающих кнопок обратной связи на сайт. Кнопки включают ссылки на социальные сети (WhatsApp, Telegram, Viber) и формы обратной связи.
 
