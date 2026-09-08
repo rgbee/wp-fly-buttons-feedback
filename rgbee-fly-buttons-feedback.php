@@ -826,6 +826,10 @@ class FlyButtonsFeedback {
             color: {$hover_color};
             text-decoration: none !important;
         }
+        .fly_buttons .fly_item a:focus {
+            outline: none;
+            box-shadow: none;
+        }
         .fly_buttons .fly_item a i {margin: 0 auto;}
 
         .fly_buttons .fly_item a.max {
